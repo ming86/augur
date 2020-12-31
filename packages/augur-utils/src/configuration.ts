@@ -39,9 +39,25 @@ export interface ParaDeploy {
   addresses: ParaAddresses
 }
 
+export interface SideChain {
+  uploadBlockNumber?: number,
+  name?: string,
+  addresses: SideChainAddresses
+}
+
 export interface SideChainDeploy {
-    uploadBlockNumber?: number,
-    addresses: SideChainAddresses
+  name?: string,
+  sideChainExternalAddresses?: SideChainExternalAddresses,
+  specific?: ArbitrumDeploy|MaticDeploy,
+}
+
+export interface ArbitrumDeploy {
+  pushBridge?: string,
+  bridge?: string,
+  marketGetter?: string,
+}
+
+export interface MaticDeploy {
 }
 
 export interface SDKConfiguration {
@@ -50,7 +66,7 @@ export interface SDKConfiguration {
   addresses?: ContractAddresses,
   paraDeploys?: ParaDeploys
   paraDeploy?: string; // cashAddress of paraDeploy to use instead of base augur deploy
-  sideChain?: SideChainDeploy,
+  sideChain?: SideChain,
   governance?: {
     uploadBlockNumber?: number,
     addresses: GovernanceAddresses
@@ -80,7 +96,7 @@ export interface SDKConfiguration {
     serial?: boolean,
     writeArtifacts?: boolean,
     externalAddresses?: ExternalAddresses,
-    sideChainExternalAddresses?: SideChainExternalAddresses,
+    sideChain?: SideChainDeploy,
   },
   warpSync?: {
     createCheckpoints?: boolean,

@@ -8,7 +8,7 @@ import { HDNode } from '@ethersproject/hdnode';
 import { Wallet } from 'ethers';
 
 import { Account } from '../constants';
-import { SDKConfiguration, SideChainDeploy, ParaDeploy } from '@augurproject/utils';
+import { SDKConfiguration, SideChain, ParaDeploy } from '@augurproject/utils';
 import {ParaContractDeployer} from '@augurproject/core/build/libraries/ParaContractDeployer';
 import {ParaAugurDeployer} from '@augurproject/core/build/libraries/ParaAugurDeployer';
 
@@ -112,7 +112,7 @@ export async function deploySideChainContracts(
   account: Account,
   compiledContracts: CompilerOutput,
   config: SDKConfiguration
-): Promise<SideChainDeploy> {
+): Promise<SideChain> {
   const signer = await makeSigner(account, provider);
   const dependencies = makeDependencies(account, provider, signer);
   const deployer = new SideChainDeployer(

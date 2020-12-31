@@ -1,6 +1,4 @@
 import { abi, buildConfig, refreshSDKConfig, updateConfig } from '@augurproject/artifacts';
-import { ParaAugurDeployer } from '@augurproject/core/build/libraries/ParaAugurDeployer';
-import { ParaContractDeployer } from '@augurproject/core/build/libraries/ParaContractDeployer';
 import { ContractInterfaces, ContractDeployer } from '@augurproject/core';
 import {
   convertDisplayAmountToOnChainAmount,
@@ -90,6 +88,7 @@ import {
 
 import {deployPara, deployParaContracts, deploySideChainContracts} from '../libs/blockchain';
 
+// tslint:disable-next-line:import-blacklist
 const compilerOutput = require('@augurproject/artifacts/build/contracts.json');
 
 const MILLION = QUINTILLION.multipliedBy(1e7);
@@ -197,16 +196,18 @@ export function addScripts(flash: FlashSession) {
       if (cash && marketGetter && repFeeTarget && zeroXExchange) {
         this.pushConfig({
           deploy: {
-            sideChainExternalAddresses: {
-              Cash: cash,
-              MarketGetter: marketGetter,
-              RepFeeTarget: repFeeTarget,
-              ZeroXExchange: zeroXExchange,
+            sideChain: {
+              sideChainExternalAddresses: {
+                Cash: cash,
+                MarketGetter: marketGetter,
+                RepFeeTarget: repFeeTarget,
+                ZeroXExchange: zeroXExchange,
+              }
             }
           }
         })
       } else if (cash || marketGetter || repFeeTarget || zeroXExchange) {
-        throw Error(`Must specify all of or none of the sidechain external addresses, not some.`);
+        throw Error('Must specify all of or none of the sidechain external addresses, not some.');
       }
 
       console.log('Deploying: ', sanitizeConfig(this.config).deploy);

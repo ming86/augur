@@ -1,5 +1,6 @@
-import {deployWethAMMContract} from '../libs/blockchain';
+import {deploySideChainContracts, deployWethAMMContract} from '../libs/blockchain';
 
+// tslint:disable-next-line:import-blacklist
 const compilerOutput = require('@augurproject/artifacts/build/contracts.json');
 import { EthersProvider } from '@augurproject/ethersjs-provider';
 import { SDKConfiguration } from '@augurproject/utils';
@@ -13,9 +14,7 @@ import {
   deployParaContracts,
   deployPara,
   hashContracts,
-  loadSeed,
   makeGanacheProvider,
-  Seed,
   startGanacheServer,
   writeSeeds, loadSeedContractsHash,
 } from '..';
@@ -118,9 +117,25 @@ export function addGanacheScripts(flash: FlashSession) {
 
       const parasSeed = await createSeed(provider, db, config.addresses, config.uploadBlockNumber, config.paraDeploys);
 
+      console.log('Deploying Arbitrum sidechain but on-chain for ease of testing');
+      config.deploy.sideChain = {
+        name: 'arbitrum',
+      }
+      config.sideChain = await deploySideChainContracts(this.network, provider, this.getAccount(), compilerOutput, config);
+
+      const sidechainSeed = await createSeed(
+        provider,
+        db,
+        config.addresses,
+        config.uploadBlockNumber,
+        config.paraDeploys,
+        config.sideChain
+      );
+
       const seeds = {
         'default': baseSeed,
         'paras': parasSeed,
+        'side': sidechainSeed,
       };
 
       await writeSeeds(seeds, filepath);
