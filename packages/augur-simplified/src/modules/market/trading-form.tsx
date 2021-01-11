@@ -509,8 +509,11 @@ const TradingForm = ({
           updateAmountError={updateButtonError}
         />
         <InfoNumbers infoNumbers={breakdown} />
-        {loginAccount && (
-          <ApprovalButton amm={amm} cash={amm?.cash} actionType={orderType === BUY ? ApprovalAction.ENTER_POSITION : ApprovalAction.EXIT_POSITION} />
+        {loginAccount && orderType === BUY && (
+          <ApprovalButton amm={amm} cash={amm?.cash}  actionType={ApprovalAction.ENTER_POSITION} />
+        )}
+        {loginAccount && orderType === SELL && (
+          <ApprovalButton amm={amm} cash={amm?.cash}  actionType={ApprovalAction.EXIT_POSITION} />
         )}
         <BuySellButton
           disabled={canMakeTrade.disabled || !approvals?.trade[ammCash?.name]}
